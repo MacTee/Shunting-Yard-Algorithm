@@ -37,6 +37,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tbPostfix = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -52,7 +53,7 @@
             // 
             // tbSource
             // 
-            this.tbSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tbSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSource.Location = new System.Drawing.Point(85, 6);
             this.tbSource.Name = "tbSource";
@@ -62,8 +63,8 @@
             // 
             // tbTokenOutput
             // 
-            this.tbTokenOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tbTokenOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbTokenOutput.Location = new System.Drawing.Point(9, 43);
             this.tbTokenOutput.Multiline = true;
@@ -93,7 +94,7 @@
             // 
             // tbResult
             // 
-            this.tbResult.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.tbResult.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbResult.Location = new System.Drawing.Point(97, 206);
             this.tbResult.Name = "tbResult";
@@ -122,14 +123,26 @@
             // 
             // tbPostfix
             // 
-            this.tbPostfix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.tbPostfix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbPostfix.Location = new System.Drawing.Point(97, 180);
             this.tbPostfix.Name = "tbPostfix";
-            this.tbPostfix.Size = new System.Drawing.Size(380, 20);
+            this.tbPostfix.Size = new System.Drawing.Size(299, 20);
             this.tbPostfix.TabIndex = 3;
+            this.tbPostfix.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
             // 
-            // Form1
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(402, 178);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 0;
+            this.button2.Text = "Evaluate";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -142,8 +155,9 @@
             this.Controls.Add(this.tbTokenOutput);
             this.Controls.Add(this.tbResult);
             this.Controls.Add(this.tbSource);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -161,6 +175,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbPostfix;
+        private System.Windows.Forms.Button button2;
     }
 }
 

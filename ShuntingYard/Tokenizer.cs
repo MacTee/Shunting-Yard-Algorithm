@@ -42,6 +42,13 @@
         /// <param name="knownSymbols">A array of known symbols.</param>
         public void Initialize(string source, char[] knownSymbols)
         {
+            mKnownSymbols = new char[] { };
+            mCurrentCharIndex = -1;
+            mCurrentChar = '\0';
+            mLastChar = '\0';
+            mSource = string.Empty;
+            mTokenValueBuffer = string.Empty;
+
             if (source.Length == 0)
                 throw new Exception("Empty or Invalid source!");
             if (knownSymbols.Length == 0)

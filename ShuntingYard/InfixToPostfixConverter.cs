@@ -65,7 +65,7 @@
             operatorStack.Clear();
             output.Clear();
 
-            knownSymbols.AddRange(Operations.Select(x => x.Symbol).ToList());
+            knownSymbols.AddRange(Operations.Where(x => !knownSymbols.Contains(x.Symbol)).Select(x => x.Symbol).ToList());
             myTokenizer.Initialize(infix, knownSymbols.ToArray());
 
             return DoShuntingYardAlgorithm(myTokenizer).Trim();
@@ -83,12 +83,39 @@
             Token token = tokenizer.ReadNextToken();
             Token lastToken = null;
             bool first = true;
+            bool afterParantheses = false;
             while (token.Type != TokenType.None)
             {
                 // - If the token is a number, then add it to the output queue.
                 if (IsDigit(token))
                     AddToOutput(token.GetValueAsString());
-                   
+
+                // - If the token is a left parenthesis (i.e. "("), then push it onto the stack.
+                else if (token.GetValueAsString() == "(")
+                    operatorStack.Push(token.GetValueAsString());
+
+                // - If the token is a right parenthesis (i.e. ")"):
+                else if (token.GetValueAsString() == ")")
+                {
+                    //   - Until the token at the top of the stack is a left parenthesis, pop operators off the stack onto the output queue.
+                    string lastOperation = operatorStack.Peek();
+                    while (lastOperation != "(")
+                    {
+                        AddToOutput(operatorStack.Pop());
+                        lastOperation = operatorStack.Peek();
+                    }
+
+                    //   - If the stack runs out without finding a left parenthesis, then there are mismatched parentheses.
+                    if (operatorStack.Count == 0)
+                        throw new Exception("Invalid Syntax! - Parentheses mismatch, missing open parentheses");
+
+                    //   - Pop the left parenthesis from the stack, but not onto the output queue.
+                    operatorStack.Pop();
+
+                    // Mark parantheses flag to avoid false negation detection.
+                    afterParantheses = true;
+                }
+
                 // - If the token is an operator, o1, then:
                 else if (IsOperator(token))
                 {
@@ -108,16 +135,20 @@
                     {
                         string lastOperation = operatorStack.Peek();
 
-                        // check for negation direct after a '(' or after another operator.
-                        if ((IsOperator(lastOperation) || lastOperation == "(") && currentOperation == "-" && lastOperation != "p" && lastOperation != "m" && !IsDigit(lastToken))
+                        // If parantheses flag is set avoid false unary operation detection
+                        if (!afterParantheses)
                         {
-                            currentOperation = "m";
-                        }
+                            // check for negation direct after a '(' or after another operator.
+                            if ((IsOperator(lastOperation) || lastOperation == "(") && currentOperation == "-" && lastOperation != "p" && lastOperation != "m" && !IsDigit(lastToken))
+                            {
+                                currentOperation = "m";
+                            }
 
-                        // check for plus sign direct after a '(' or after another operator.
-                        if ((IsOperator(lastOperation) || lastOperation == "(") && currentOperation == "+" && lastOperation != "p" && lastOperation != "m" && !IsDigit(lastToken))
-                        {
-                            currentOperation = "p";
+                            // check for plus sign direct after a '(' or after another operator.
+                            if ((IsOperator(lastOperation) || lastOperation == "(") && currentOperation == "+" && lastOperation != "p" && lastOperation != "m" && !IsDigit(lastToken))
+                            {
+                                currentOperation = "p";
+                            }
                         }
 
                         //   - while there is an operator token, lastOperation, at the top of the operator stack, and either
@@ -143,29 +174,9 @@
                         
                     //   - push o1 onto the operator stack.
                     operatorStack.Push(currentOperation);
-                }
 
-                // - If the token is a left parenthesis (i.e. "("), then push it onto the stack.
-                else if (token.GetValueAsString() == "(")
-                    operatorStack.Push(token.GetValueAsString());
-
-                // - If the token is a right parenthesis (i.e. ")"):
-                else if (token.GetValueAsString() == ")")
-                {
-                    //   - Until the token at the top of the stack is a left parenthesis, pop operators off the stack onto the output queue.
-                    string lastOperation = operatorStack.Peek();
-                    while (lastOperation != "(")
-                    {
-                        AddToOutput(operatorStack.Pop());
-                        lastOperation = operatorStack.Peek();
-                    }
-
-                    //   - If the stack runs out without finding a left parenthesis, then there are mismatched parentheses.
-                    if (operatorStack.Count == 0)
-                        throw new Exception("Invalid Syntax! - Parentheses mismatch, missing open parentheses");
-
-                    //   - Pop the left parenthesis from the stack, but not onto the output queue.
-                    operatorStack.Pop();
+                    // Reset parantheses flag.
+                    afterParantheses = false;
                 }
                 else
                 {

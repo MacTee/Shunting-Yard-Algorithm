@@ -11,7 +11,7 @@ namespace ShuntingYardApp
         {
             InitializeComponent();
 
-            tbSource.Text = "3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3";
+            tbSource.Text = "(1)-(-1)"; // "1+(1)+(1)+1"; //"3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3";
             ActiveControl = tbSource;
         }
 
@@ -31,7 +31,7 @@ namespace ShuntingYardApp
             }
             catch (Exception ex)
             {
-                tbResult.Text = string.Format("Error: {0}", ex.Message);
+                tbResult.Text = string.Format("Error: {0}{1}", ex.Message, Environment.NewLine);
                 tbTokenOutput.AppendText(tbResult.Text);
             }
         }
@@ -55,6 +55,29 @@ namespace ShuntingYardApp
                     currentToken.GetValueAsString(), Environment.NewLine));
                 currentToken = tokenizer.ReadNextToken();
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            tbTokenOutput.AppendText(string.Format("PostfixEvaluation:{0}", Environment.NewLine));
+
+            try
+            {
+                PostfixEvaluator eva = new PostfixEvaluator();
+                var result = eva.Evaluate(tbPostfix.Text);
+                tbResult.Text = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                tbResult.Text = string.Format("Error: {0}{1}", ex.Message, Environment.NewLine);
+                tbTokenOutput.AppendText(tbResult.Text);
+            }
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+                this.button2_Click(tbSource, null);
         }
     }
 }

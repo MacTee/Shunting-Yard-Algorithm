@@ -14,10 +14,10 @@
         /// Evaluates/calculates the result of a formula in postfix notation.
         /// </summary>
         /// <param name="postfixString">The formula (in postfix notation) to evaluate.</param>
-        /// <returns>The evaluated/calculated result of the formula as a double.</returns>
-        public double Evaluate(string postfixString)
+        /// <returns>The evaluated/calculated result of the formula as a decimal.</returns>
+        public decimal Evaluate(string postfixString)
         {
-            var stack = new Stack<double>();
+            var stack = new Stack<decimal>();
             var input = new Queue<string>();
 
             foreach (var entry in postfixString.Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
@@ -33,7 +33,7 @@
                 // - If the scanned character is an operand, add it to the stack.
                 if (!IsOperator(entry))
                 {
-                    stack.Push(double.Parse(entry));
+                    stack.Push(decimal.Parse(entry));
                 }
 
                 // if operator is a negation or a additional plus sign.
@@ -64,8 +64,8 @@
                     //   - then we store the top most element of the stack(topStack) in a variable temp.
                     //     Pop the stack. Now evaluate topStack(Operator)temp. Let the result of this operation be retVal. 
                     //     Pop the stack and Push retVal into the stack.
-                    double rightOperand = stack.Pop();
-                    double leftOperand = stack.Pop();
+                    decimal rightOperand = stack.Pop();
+                    decimal leftOperand = stack.Pop();
                     switch (entry)
                     {
                         case "+":
@@ -81,7 +81,7 @@
                             stack.Push(leftOperand / rightOperand);
                             break;
                         case "^":
-                            stack.Push(Math.Pow(leftOperand, rightOperand));
+                            stack.Push(Convert.ToDecimal(Math.Pow((double)leftOperand, (double)rightOperand)));
                             break;
                     }
                 }
@@ -92,7 +92,7 @@
 
                 //   Repeat this step till all the characters are scanned.
             }
-
+            
             // After all characters are scanned, we will have only one element in the stack. Return topStack.
             if (stack.Count > 1)
                 throw new Exception("More than one result on the stack.");
