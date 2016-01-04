@@ -1,4 +1,6 @@
-﻿namespace ShuntingYard
+﻿using System.Collections.Generic;
+
+namespace ShuntingYard
 {
     using System;
     using System.Linq;
@@ -40,7 +42,8 @@
         /// </summary>
         /// <param name="source">The source string to tokenize.</param>
         /// <param name="knownSymbols">A array of known symbols.</param>
-        public void Initialize(string source, char[] knownSymbols)
+        /// <returns>A self reference (this).</returns>
+        public ITokenizer Initialize(string source, char[] knownSymbols)
         {
             mKnownSymbols = new char[] { };
             mCurrentCharIndex = -1;
@@ -58,6 +61,8 @@
             mKnownSymbols = knownSymbols;
             mTokenValueBuffer = string.Empty;
             ReadNextChar();
+
+            return this;
         }
 
         /// <summary>
@@ -77,6 +82,26 @@
                 return ReadDigits();
 
             return ReadSymbol();
+        }
+
+        /// <summary>
+        /// Reads all available Tokens (from the current position).
+        /// </summary>
+        /// <returns>A Token array with all available tokens.</returns>
+        public Token[] ReadAllTokens()
+        {
+            Token currentToken = ReadNextToken();
+            if (currentToken.Type == TokenType.None)
+                return new Token[] {};
+
+            List<Token> allTokens = new List<Token>();
+            while (currentToken.Type != TokenType.None)
+            {
+                allTokens.Add(currentToken);
+                currentToken = ReadNextToken();
+            }
+
+            return allTokens.ToArray();
         }
         
         #endregion

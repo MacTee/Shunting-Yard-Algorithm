@@ -7,13 +7,13 @@
     public class TokenizerTest
     {
         [TestMethod]
-        public void TokenizingTest()
+        public void TokenizingTest_ReadNextToken()
         {
             // Arrange
             int count = 0;
-            string source = "10-2+3232*4/5.2()";
             string[] expectedTokens = {"10", "-", "2", "+", "3232", "*", "4", "/", "5.2", "(", ")"};
-            Tokenizer tokenizer = new Tokenizer(source, new[] { '+', '-', '*', '/', '^', '(', ')' });
+            string source = string.Join(string.Empty, expectedTokens); //  = "10-2+3232*4/5.2()"
+            ITokenizer tokenizer = new Tokenizer(source, new[] { '+', '-', '*', '/', '^', '(', ')' });
             
             // Act and assert each act.
             Token currentToken = tokenizer.ReadNextToken();
@@ -26,6 +26,26 @@
 
             // Assert end result.
             Assert.AreEqual(expectedTokens.Length, count);
+        }
+
+        [TestMethod]
+        public void TokenizingTest_ReadAllTokens()
+        {
+            // Arrange
+            int index = 0;
+            string[] expectedTokens = { "10", "-", "2", "+", "3232", "*", "4", "/", "5.2", "(", ")" };
+            string source = string.Join(string.Empty, expectedTokens); //  = "10-2+3232*4/5.2()"
+            ITokenizer tokenizer = new Tokenizer().Initialize(source, new[] { '+', '-', '*', '/', '^', '(', ')' });
+
+            // Act and assert each act.
+            Token[] allTokens = tokenizer.ReadAllTokens();
+            foreach (var token in allTokens)
+            {
+                Assert.AreEqual(expectedTokens[index++], token.GetValueAsString());
+            }
+
+            // Assert end result.
+            Assert.AreEqual(expectedTokens.Length, index);
         }
     }
 }
