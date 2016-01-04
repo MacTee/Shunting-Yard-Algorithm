@@ -20,4 +20,4 @@ This implementation supports the following operations:
 - '-1' or '+1' (negative/positive numbers)
 ```
 
-The support of unary operations is realised by replacing the 'additional' plus or minus signs with a 'p' or 'm' in the postfix notation and handle those operations differently during postfix evaluation.
+The support of unary operations is realised by replacing the 'additional' plus or minus signs with a 'p' or 'm' in the postfix notation, handle them right associativ with high priority and calculate them differently during postfix evaluation.
